@@ -6,6 +6,7 @@ import {
   Users,
   UserCog,
   FileText,
+  UserPlus,
   CreditCard,
   Settings,
   Shield,
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
+  { icon: UserPlus, label: "Leads", href: "/admin/leads" },
   { icon: ClipboardList, label: "Service Requests", href: "/admin/requests" },
   { icon: Users, label: "Customers", href: "/admin/customers" },
   { icon: UserCog, label: "Technicians", href: "/admin/technicians" },

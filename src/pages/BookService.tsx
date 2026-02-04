@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Calendar, Upload, MapPin, Clock, ArrowRight, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCreateLead } from "@/hooks/useLeads";
 
 const serviceTypes = [
   { value: "installation", label: "New CCTV Installation" },
@@ -34,6 +35,8 @@ export default function BookService() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
+  const [serviceType, setServiceType] = useState("");
+  const createLead = useCreateLead();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -45,17 +48,52 @@ export default function BookService() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const phone = formData.get("phone") as string;
+    const email = formData.get("email") as string;
+    const description = formData.get("description") as string;
+    const address = formData.get("address") as string;
+    const city = formData.get("city") as string;
 
-    toast({
-      title: "Booking Submitted!",
-      description: "We'll confirm your appointment within 2 hours.",
-    });
+    // Validate required fields
+    if (!name?.trim() || !phone?.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
-    setFiles([]);
+    try {
+      await createLead.mutateAsync({
+        name: name.trim(),
+        mobile: phone.trim(),
+        email: email?.trim() || undefined,
+        location: city ? `${address}, ${city}` : address,
+        service_type: serviceType || undefined,
+        message: description?.trim() || undefined,
+      });
+
+      toast({
+        title: "Booking Submitted!",
+        description: "We'll confirm your appointment within 2 hours.",
+      });
+
+      (e.target as HTMLFormElement).reset();
+      setFiles([]);
+      setServiceType("");
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -108,7 +146,7 @@ export default function BookService() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Service Type *</Label>
-                    <Select name="serviceType" required>
+                    <Select value={serviceType} onValueChange={setServiceType} required>
                       <SelectTrigger>
                         <SelectValue placeholder="Select service type" />
                       </SelectTrigger>
