@@ -175,6 +175,48 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          email: string | null
+          id: string
+          location: string | null
+          message: string | null
+          mobile: string
+          name: string
+          service_type: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          location?: string | null
+          message?: string | null
+          mobile: string
+          name: string
+          service_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          location?: string | null
+          message?: string | null
+          mobile?: string
+          name?: string
+          service_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

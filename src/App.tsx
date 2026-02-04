@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminLeads from "./pages/admin/Leads";
 import ServiceRequests from "./pages/admin/ServiceRequests";
 
 // Technician Pages
@@ -49,6 +50,7 @@ const App = () => (
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="leads" element={<AdminLeads />} />
             <Route path="requests" element={<ServiceRequests />} />
             <Route path="customers" element={<AdminDashboard />} />
             <Route path="technicians" element={<AdminDashboard />} />
